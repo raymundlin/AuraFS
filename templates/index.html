@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AuraFS Dashboard</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <header>
+    <h1>&#x2728; AuraFS</h1>
+    <p id="target-folder" class="subtitle"></p>
+  </header>
+
+  <!-- ── Disk Overview ── -->
+  <section class="dashboard-cards">
+    <div class="card" id="card-folder-size">
+      <span class="card-label">Folder Size</span>
+      <span class="card-value" id="val-folder-size">…</span>
+    </div>
+    <div class="card" id="card-disk-total">
+      <span class="card-label">Disk Total</span>
+      <span class="card-value" id="val-disk-total">…</span>
+    </div>
+    <div class="card" id="card-disk-free">
+      <span class="card-label">Free Space</span>
+      <span class="card-value" id="val-disk-free">…</span>
+    </div>
+    <div class="card" id="card-disk-used">
+      <span class="card-label">Disk Used</span>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar" id="disk-progress"></div>
+      </div>
+      <span class="card-value" id="val-disk-used">…</span>
+    </div>
+  </section>
+
+  <!-- ── Smart Deletion ── -->
+  <section class="feature-section" id="section-deletion">
+    <h2 class="section-title" onclick="toggleSection('deletion')">
+      🗑️ Smart Deletion
+      <span class="toggle-icon" id="toggle-deletion">▾</span>
+    </h2>
+    <div class="section-body" id="body-deletion">
+      <div class="filter-row">
+        <label>Show files unused for:</label>
+        <select id="deletion-period" onchange="loadUnusedFiles()">
+          <option value="month">1 Month</option>
+          <option value="year" selected>1 Year</option>
+          <option value="3years">3 Years</option>
+        </select>
+        <button class="btn-refresh" onclick="loadUnusedFiles()">↻ Refresh</button>
+      </div>
+      <div id="deletion-loading" class="loading-msg hidden">Loading…</div>
+      <div id="deletion-empty" class="empty-msg hidden">No unused files found for this period.</div>
+      <div id="deletion-list"></div>
+    </div>
+  </section>
+
+  <!-- ── Smart Structure ── -->
+  <section class="feature-section" id="section-structure">
+    <h2 class="section-title" onclick="toggleSection('structure')">
+      📁 Smart Structure
+      <span class="toggle-icon" id="toggle-structure">▾</span>
+    </h2>
+    <div class="section-body" id="body-structure">
+      <div class="two-col">
+        <!-- Directory Tree -->
+        <div class="col-tree">
+          <h3>Directory Tree <small>(top 3 levels)</small></h3>
+          <div id="tree-loading" class="loading-msg">Loading tree…</div>
+          <div id="dir-tree"></div>
+        </div>
+        <!-- Recommendations -->
+        <div class="col-recs">
+          <h3>Recommendations
+            <span id="structure-spinner" class="spinner hidden"></span>
+          </h3>
+          <div class="recs-header" style="margin-bottom:0.5rem">
+            <button class="btn-refresh" onclick="triggerStructure()">↻ Analyse</button>
+          </div>
+          <div id="structure-status-msg" class="status-msg"></div>
+          <div id="structure-recs-list"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Smart Connection ── -->
+  <section class="feature-section" id="section-connection">
+    <h2 class="section-title" onclick="toggleSection('connection')">
+      🔗 Smart Connection
+      <span class="toggle-icon" id="toggle-connection">▾</span>
+    </h2>
+    <div class="section-body" id="body-connection">
+      <!-- Query box -->
+      <div class="query-row">
+        <input type="text" id="conn-query" placeholder="Enter file name to find connections…" />
+        <button class="btn-primary" onclick="queryConnections()">Search</button>
+      </div>
+      <div id="conn-query-results" class="query-results hidden"></div>
+
+      <hr />
+
+      <!-- Pending recommendations -->
+      <div class="recs-header">
+        <h3>Pending Recommendations
+          <span id="conn-spinner" class="spinner hidden"></span>
+        </h3>
+        <button class="btn-refresh" onclick="triggerConnections()">↻ Analyse</button>
+      </div>
+      <div id="conn-status-msg" class="status-msg"></div>
+      <div id="conn-recs-list"></div>
+    </div>
+  </section>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
